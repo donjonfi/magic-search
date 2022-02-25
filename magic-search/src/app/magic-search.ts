@@ -1,13 +1,19 @@
-
-import { JaroDistance } from './algo/jaro-distance.js';
-
-import * as levenshtien from '../../node_modules/damerau-levenshtein';
-
-interface LevenshteinResponse {
-    steps: number;
-    relative: number;
-    similarity: number;
-}
+// ==================================================
+// USAGE:
+// ==================================================
+// searchTerms: string;
+//
+// search = new MagicSearch();
+//
+// ngOnInit() {
+//   this.search.setDictionary(['Paris', 'Bruxelles', 'Madrid']);
+// }
+//
+// onSearch() {
+//   let result = this.search.doSearch(this.searchTerms);
+//   console.log("result:", result);
+// }
+// ==================================================
 
 export class MagicSearch {
 
@@ -78,8 +84,6 @@ export class MagicSearch {
             const searchTokenWithoutS = (searchToken.endsWith('s') || searchToken.endsWith('x')) ? searchToken.slice(0, searchToken.length - 1) : searchToken;
             for (let entryIndex = 0; entryIndex < dictionaryLen; entryIndex++) {
 
-                let jaroToDelete = JaroDistance.jaro(searchToken, this.cleanDictionary[entryIndex]);
-
                 // token found in entry
                 if (this.cleanDictionary[entryIndex].includes(searchTokenWithoutS)) {
 
@@ -95,16 +99,9 @@ export class MagicSearch {
                             scores[entryIndex] += 2;
                         }
                     }
-                    // search for similar word
+                    // TODO: search for similar word
                 } else {
-                    // let jaroSimilarity = JaroDistance.jaro(searchToken, this.cleanDictionary[entryIndex]);
-                    // console.log('jaro for (', searchToken, ',', this.cleanDictionary[entryIndex], ') :', jaroSimilarity);
-                    let lev: LevenshteinResponse = levenshtien('searchToken', this.cleanDictionary[entryIndex]);
-                    console.log('Levenshtein for (', searchToken, ',', this.cleanDictionary[entryIndex], ') :', lev.similarity);
-
-                    if (lev.similarity >= 0.75) {
-                        scores[entryIndex] += 2;
-                    }
+                   
                 }
             }
         }
